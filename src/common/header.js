@@ -30,18 +30,14 @@ const Style = {
     },
     toolbarButtonContainer: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    toolbarButton: {
-        flex: 1,
+        maxWidth: 60,
         alignItems: 'center',
         justifyContent: 'center'
     },
     toolbarTitle: {
         fontSize: Theme.titleFontSize,
         color: Theme.titleFontColor,
-        marginLeft: (Platform.OS === 'ios') ? 0 : 5
+        marginLeft: (Platform.OS === 'ios') ? 0 : 10
     },
     toolbarTitleContainer: {
         flex: 8,
@@ -73,10 +69,7 @@ export default class Header extends React.Component {
 
     static RightButton(props) {
         return (
-            <Touchable
-                style={Style.toolbarButton}
-                onPress={props.onPress}
-            >
+            <Touchable onPress={props.onPress}>
                 <View>{props.children}</View>
             </Touchable>
         );
@@ -84,13 +77,25 @@ export default class Header extends React.Component {
 
     static LeftButton(props) {
         return (
-            <Touchable
-                style={Style.toolbarButton}
-                onPress={props.onPress}
-            >
+            <Touchable onPress={props.onPress}>
                 <View>{props.children}</View>
             </Touchable>
         );
+    }
+
+    getButton(id, children) {
+        const element = this.getElement(id, children);
+        if (element || Platform.OS === 'ios') {
+            return <View style={Style.toolbarButtonContainer}>{element}</View>;
+        }
+        return null;
+    }
+
+    getTitle(children) {
+        const element = this.getElement('Title', children);
+        if (element) {
+            return <View style={Style.toolbarTitleContainer}>{element}</View>;
+        }
     }
 
     getElement(identifier, elements) {
@@ -100,21 +105,14 @@ export default class Header extends React.Component {
 
     renderContent() {
         const children = [].concat(this.props.children);
-
         const custom = this.getElement('Custom', children);
         if (custom) return custom;
 
         return (
             <View style={Style.toolbarContainer}>
-                <View style={{ flex: 1 }}>
-                    {this.getElement('LeftButton', children)}
-                </View>
-                <View style={{ flex: 8 }}>
-                    {this.getElement('Title', children)}
-                </View>
-                <View style={{ flex: 1 }}>
-                    {this.getElement('RightButton', children)}
-                </View>
+                {this.getButton('LeftButton', children)}
+                {this.getTitle(children)}
+                {this.getButton('RightButton', children)}
             </View>
         );
     }
