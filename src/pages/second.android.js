@@ -30,7 +30,7 @@ export default class Second extends React.Component {
     state = { text: '' };
 
     componentWillMount() {
-        this.setState({ text: this.props.foo });
+        this.setState({ text: this.props.navigation.state.params.foo });
     }
 
     onChangeText(text) {
