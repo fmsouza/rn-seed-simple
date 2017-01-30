@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { CardView, Header, Icon } from '../common';
+import { connect } from 'react-redux';
+import { push } from '../actions';
+import { CardView, Icon, Touchable } from '../common';
 
 const Style = {
     card: {
@@ -10,7 +12,7 @@ const Style = {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F5FCFF',
+        backgroundColor: '#FFF',
     },
     welcome: {
         fontSize: 20,
@@ -24,39 +26,50 @@ const Style = {
     }
 };
 
-export default class Home extends React.Component {
+class Home extends React.Component {
 
-    onPressRightButton() {
-        this.props.navigator.push({ id: 'second', args: { foo: 'nothing yet' } });
-    }
+    static navigationOptions = {
+        title: 'Header',
+
+        header: (navigation) => ({
+            right: (
+                <Touchable
+                    onPress={() => navigation.navigate('Second', { foo: 'nothing yet' })}
+                    style={{ marginRight: 15 }}
+                >
+                    <Icon name='arrow-forward' />
+                </Touchable>
+            )
+        })
+    };
 
     render() {
         return (
-            <View style={{ flex: 1 }}>
-                <Header>
-                    <Header.Title>
-                        <Text>Header</Text>
-                    </Header.Title>
-                    <Header.RightButton onPress={() => this.onPressRightButton()}>
-                        <Icon name="arrow-forward" />
-                    </Header.RightButton>
-                </Header>
-            
-                <View style={Style.container}>
-                    <CardView style={Style.card}>
-                        <Text style={Style.welcome}>
-                            Welcome to React Native!!!!
-                        </Text>
-                        <Text style={Style.instructions}>
-                            To get started, edit index.android.js
-                        </Text>
-                        <Text style={Style.instructions}>
-                            Double tap R on your keyboard to reload,{'\n'}
-                            Shake or press menu button for dev menu
-                        </Text>
-                    </CardView>
-                </View>
+            <View style={Style.container}>
+                <CardView style={Style.card}>
+                    <Text style={Style.welcome}>
+                        Welcome to React Native!!!!
+                    </Text>
+                    <Text style={Style.instructions}>
+                        (Android){'\n'}
+                        Double tap R on your keyboard to reload{'\n'}
+                        Shake or press menu button for dev menu{'\n'}
+                    </Text>
+                    <Text style={Style.instructions}>
+                        (iOS){'\n'}
+                        Press Cmd + R on your keyboard to reload{'\n'}
+                        Cmd + D for dev menu{'\n'}
+                    </Text>
+                </CardView>
             </View>
         );
     }
 }
+
+function mapDispatchToProps(dispatch) {
+    return {
+        navigate: (route, args) => dispatch(push(route, args))
+    };
+}
+
+export default connect(null, mapDispatchToProps)(Home);

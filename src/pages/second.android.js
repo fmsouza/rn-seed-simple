@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { CardView, Header, Searchbar } from '../common';
+import { CardView } from '../common';
 
 const Style = {
     card: {
@@ -11,9 +11,10 @@ const Style = {
         flex: 1,
         justifyContent: 'flex-start',
         alignItems: 'center',
-        padding: 10
+        padding: 10,
+        backgroundColor: '#FFF'
     },
-    welcome: {
+    cardText: {
         fontSize: 20,
         textAlign: 'center',
         margin: 10,
@@ -22,10 +23,14 @@ const Style = {
 
 export default class Second extends React.Component {
 
+    static navigationOptions = {
+        title: 'Second Page',
+    };
+
     state = { text: '' };
 
     componentWillMount() {
-        this.setState({ text: this.props.args.foo });
+        this.setState({ text: this.props.foo });
     }
 
     onChangeText(text) {
@@ -34,24 +39,12 @@ export default class Second extends React.Component {
 
     render() {
         return (
-            <View style={{ flex: 1 }}>
-                <Header>
-                    <Header.Custom>
-                        <Searchbar
-                            onChangeText={this.onChangeText.bind(this)}
-                            placeholder="Text your search here"
-                            autoFocus
-                        />
-                    </Header.Custom>
-                </Header>
-            
-                <View style={Style.container}>
-                    <CardView style={Style.card}>
-                        <Text style={Style.welcome}>
-                            You typed {this.state.text}
-                        </Text>
-                    </CardView>
-                </View>
+            <View style={Style.container}>
+                <CardView style={Style.card}>
+                    <Text style={Style.cardText}>
+                        You typed {this.state.text}
+                    </Text>
+                </CardView>
             </View>
         );
     }

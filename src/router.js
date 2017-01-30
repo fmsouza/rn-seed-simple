@@ -1,14 +1,14 @@
-import React from 'react';
-import { Home, Second } from './pages';
+import { StackNavigator } from 'react-navigation';
+import * as Pages from './pages';
 
-export default (route, navigator) => {
-    switch (route.id) {
+export const INITIAL_ROUTE = 'Home';
 
-        default:
-        case 'home':
-            return <Home navigator={navigator} args={route.args} />;
-
-        case 'second':
-            return <Second navigator={navigator} args={route.args} />;
+export const AppNavigator = StackNavigator(
+    {
+        Home: { screen: Pages.Home },
+        Second: { screen: Pages.Second }
+    },
+    {
+        initialRouteName: INITIAL_ROUTE
     }
-};
+);

@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
+import nav from './nav';
 
 export default combineReducers({
-    empty: function () { return {}; }
+    nav
 });

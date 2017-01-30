@@ -1,46 +1,28 @@
 import React from 'react';
-import { Navigator, Platform, BackAndroid, StatusBar, View } from 'react-native';
+import { StatusBar, View, AsyncStorage } from 'react-native';
 import { Provider } from 'react-redux';
-import configureStore from './store';
-import router from './router';
+import { persistStore } from 'redux-persist';
+import { AppWithNavigationState, Store } from './store';
 import Theme from './theme';
 
 export default class App extends React.Component {
 
     componentDidMount() {
-        BackAndroid.addEventListener('hardwareBackPress', () => {
-            if (this.navigator && this.navigator.getCurrentRoutes().length > 1) {
-                this.navigator.pop();
-                return true;
-            }
-            return false;
-        });
+        persistStore(this.store, { storage: AsyncStorage });
     }
 
-    renderScene(route, navigator) {
-        return router(route, navigator);
-    }
+    store = Store;
 
     render() {
-        const store = configureStore();
         return (
-            <Provider store={store}>
+            <Provider store={this.store}>
                 <View style={{ flex: 1 }}>
                     <StatusBar
                         translucent={false}
                         backgroundColor={Theme.statusBarColor}
                         barStyle={Theme.statusBarStyle}
                     />
-                    <Navigator
-                        store={store}
-                        ref={ref => { this.navigator = ref; }}
-                        initialRoute={{}}
-                        renderScene={this.renderScene}
-                        configureScene={() => (Platform.OS === 'ios') ?
-                            Navigator.SceneConfigs.HorizontalSwipeJump :
-                            Navigator.SceneConfigs.FloatFromBottomAndroid
-                        }
-                    />
+                    <AppWithNavigationState />
                 </View>
             </Provider>
         );

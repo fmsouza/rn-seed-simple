@@ -13,7 +13,11 @@ const Style = {
 };
 
 export default props => (
-    <View style={{ ...Style.container, ...props.style }} elevation={2}>
+    <View
+        {...props}
+        style={{ ...Style.container, ...props.style }}
+        elevation={props.elevation || 2}
+    >
         {props.children}
     </View>
 );

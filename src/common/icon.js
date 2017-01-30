@@ -13,9 +13,11 @@ function getSize(size) {
     }
 } 
 
-export default ({ name, size, color }) => {
-    name = (Platform.OS === 'ios') ? `ios-${name}` : `md-${name}`;
+export default (props) => {
+    let { name, size, color } = props;
+    const { rawIconName } = props;
+    if (!rawIconName) name = (Platform.OS === 'ios') ? `ios-${name}` : `md-${name}`;
     size = getSize(size);
     color = color || '#000';
-    return <Ionicon name={name} size={size} color={color} />;
+    return <Ionicon {...props} name={name} size={size} color={color} />;
 };
